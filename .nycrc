@@ -1,0 +1,29 @@
+{
+  "include": [
+    "src/**/*.ts"
+  ],
+  "extension": [
+    ".ts"
+  ],
+  "exclude": [
+    "**/*.d.ts",
+    "lib/**",
+    "esm/**",
+    "lib/**/*.test.ts",
+    "tests/**",
+    "node_modules/**"
+  ],
+  "reporter": [
+    "clover",
+    "cobertura",
+    "html",
+    "json",
+    "lcov",
+    "text",
+    "text-summary"
+  ],
+  "clean": true,
+  "temp-dir": "reports/.nyc_ouptut",
+  "report-dir": "reports/coverage",
+  "all": true
+}

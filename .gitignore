@@ -1,0 +1,7 @@
+/lib/
+/esm/
+/node_modules/
+/reports/
+*.log
+/*.tgz
+*.tsbuildinfo
