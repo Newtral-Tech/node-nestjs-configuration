@@ -3,13 +3,9 @@ import { ErrorObject } from 'ajv';
 export class ConfigurationError extends Error {
   readonly name = this.constructor.name;
 
-  constructor(readonly errors: ErrorObject[]) {
-    super();
-  }
-
   get message(): string {
     const errorMessage = this.errors
-      .map(({ message, dataPath }) => {
+      .map(({ message, dataPath, params }) => {
         if (dataPath.startsWith('.')) {
           dataPath = dataPath.slice(1);
         }
@@ -18,10 +14,20 @@ export class ConfigurationError extends Error {
           dataPath = `${dataPath} `;
         }
 
-        return `  - ${dataPath}${message}`;
+        return `  - ${dataPath}${message} | ${paramsToString(params)}`.trim();
       })
       .join('\n');
 
     return `Invalid configuration found:\n\n${errorMessage}\n`;
   }
+
+  constructor(readonly errors: ErrorObject[]) {
+    super();
+  }
 }
+
+const paramsToString = (params: object): string => {
+  return Object.entries(params)
+    .map(pair => pair.join('='))
+    .join(', ');
+};

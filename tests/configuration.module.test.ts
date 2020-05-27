@@ -33,8 +33,27 @@ describe('ConfigurationModule', () => {
     }).to.not.throw(ConfigurationError);
   });
 
+  it('should throw a configuration error when the configuration is invalid (required configuration)', async () => {
+    const { InjectConfiguration, configurationModule } = ConfigurationModule.forEnvironment({
+      type: 'object',
+      properties: { TEST_CONFIG: { type: 'integer' } },
+      required: ['TEST_CONFIG']
+    });
+
+    @Injectable()
+    class TestService {
+      constructor(@InjectConfiguration('TEST_CONFIG') readonly testConfig: string) {}
+    }
+
+    await expect(
+      Test.createTestingModule({ imports: [configurationModule], providers: [TestService] }).compile()
+    ).to.eventually.be.rejectedWith(ConfigurationError);
+  });
+
   it('should throw a configuration error when the configuration is invalid', async () => {
-    // TEST_CONFIG is required but it is not set
+    // TEST_CONFIG is integer but we pass a string
+    process.env.TEST_CONFIG = faker.random.uuid();
+
     const { InjectConfiguration, configurationModule } = ConfigurationModule.forEnvironment({
       type: 'object',
       properties: { TEST_CONFIG: { type: 'integer' } },
@@ -158,6 +177,18 @@ describe('ConfigurationModule', () => {
     const testService = moduleRef.get(TestService);
 
     expect(testService.testConfig).to.be.equal(testConfig);
+  });
+
+  it('should generate an object containing the configuration injection tokens', async () => {
+    process.env.TEST_CONFIG = faker.random.uuid();
+
+    const { tokens } = ConfigurationModule.forEnvironment({
+      type: 'object',
+      properties: { TEST_CONFIG: { type: 'string' } }
+    });
+
+    expect(tokens.TEST_CONFIG).to.be.a('symbol');
+    expect(tokens.TEST_CONFIG.description).to.be.equal(`configuration.TEST_CONFIG`);
   });
 });
 
