@@ -16,6 +16,9 @@
     "esm",
     "lib"
   ],
+  "engines": {
+    "node": ">=10"
+  },
   "dependencies": {
     "@types/json-schema": "^7.0.4",
     "ajv": "^6.12.2",

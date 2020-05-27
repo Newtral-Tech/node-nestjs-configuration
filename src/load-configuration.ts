@@ -58,7 +58,14 @@ export function loadConfiguration<T extends JSONSchema7>(schema: T, ajv: Ajv): C
 
   // Assign the generated env to the original process.env just in case some third party package is using it
   Object.assign(process.env, env);
-  Object.assign(process.env, Object.fromEntries(Object.entries(env).map(([key, val]) => [key, String(val)])));
+  Object.assign(
+    process.env,
+    Object.entries(env).reduce((result, [key, val]) => {
+      result[key] = String(val);
+
+      return result;
+    }, {} as Record<string, string>)
+  );
 
   return env as Configuration<T>;
 }

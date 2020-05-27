@@ -27,9 +27,11 @@ export class ConfigurationModule {
       inject: [CONFIGURATION]
     }));
 
-    const tokens: ConfigurationInjectionTokens<T> = Object.fromEntries(
-      Object.keys(schema?.properties ?? {}).map(key => [key, getConfigurationInjectionToken(key)])
-    ) as any;
+    const tokens: ConfigurationInjectionTokens<T> = Object.keys(schema?.properties ?? {}).reduce((result, key) => {
+      result[key] = getConfigurationInjectionToken(key);
+
+      return result;
+    }, {} as any);
 
     return {
       InjectConfiguration: (configurationKey?: keyof Configuration<T>) => {

@@ -188,7 +188,6 @@ describe('ConfigurationModule', () => {
     });
 
     expect(tokens.TEST_CONFIG).to.be.a('symbol');
-    expect(tokens.TEST_CONFIG.description).to.be.equal(`configuration.TEST_CONFIG`);
   });
 });
 
