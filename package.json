@@ -70,5 +70,8 @@
     "ci": "yarn && yarn lint && yarn build --noEmit && yarn test",
     "prepublishOnly": "yarn build",
     "semantic-release": "semantic-release"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
