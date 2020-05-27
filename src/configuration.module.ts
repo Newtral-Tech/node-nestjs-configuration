@@ -6,7 +6,7 @@ import { getConfigurationInjectionToken } from './get-configuration-injection-to
 import { JsonSchemaToJs } from './json-schema-to-js.type';
 import { loadConfiguration } from './load-configuration';
 
-const defaultAjv = new Ajv({ $data: true, coerceTypes: true, useDefaults: true });
+const defaultAjv = new Ajv({ $data: true, coerceTypes: true, useDefaults: true, allErrors: true });
 
 export class ConfigurationModule {
   /**
@@ -27,8 +27,14 @@ export class ConfigurationModule {
       inject: [CONFIGURATION]
     }));
 
+    const tokens: ConfigurationInjectionTokens<T> = Object.keys(schema?.properties ?? {}).reduce((result, key) => {
+      result[key] = getConfigurationInjectionToken(key);
+
+      return result;
+    }, {} as any);
+
     return {
-      InjectConfiguration: (configurationKey?: keyof Configuration<T>): ParameterDecorator => {
+      InjectConfiguration: (configurationKey?: keyof Configuration<T>) => {
         if (configurationKey) {
           return Inject(getConfigurationInjectionToken(configurationKey as string));
         }
@@ -39,28 +45,33 @@ export class ConfigurationModule {
         module: ConfigurationModule,
         providers: [configurationProvider, ...providers],
         exports: [CONFIGURATION, ...providers.map(provider => provider.provide)]
-      }
+      },
+      tokens
     };
   }
 }
 
-/** Decorator that inject the whole configuration object or a single value depending on how it's used */
-export interface InjectConfigurationDecorator<T extends JSONSchema7> {
+export interface ConfigurationModuleResult<T extends JSONSchema7> {
   /**
    * Inject a single configuration value that matches the given key.
    * The type for the injected value is `Configuration<schema>[configurationKey]`
    * @param configurationKey - The property name of the configuration to inject.
    */
-  (configurationKey: keyof Configuration<T>): ParameterDecorator;
+  InjectConfiguration(
+    configurationKey: keyof Configuration<T>
+  ): (target: Object, propertyKey: string | symbol, parameterIndex?: number) => void;
 
   /** Inject the whole configuration object. The type for this object is `Configuration<schema>` */
-  (): ParameterDecorator;
-}
+  InjectConfiguration(): (target: Object, propertyKey: string | symbol, parameterIndex?: number) => void;
 
-export interface ConfigurationModuleResult<T extends JSONSchema7> {
-  InjectConfiguration: InjectConfigurationDecorator<T>;
+  /** Configuration module. Should be imported by other modules */
   configurationModule: DynamicModule;
+
+  /** Configuration injection tokens. Useful for dynamically getting a configuration value */
+  tokens: ConfigurationInjectionTokens<T>;
 }
 
 /** Map a JSON schema into a valid JS type representation. It's currently very limited but usable enough */
 export type Configuration<T extends JSONSchema7> = JsonSchemaToJs<T>;
+
+export type ConfigurationInjectionTokens<T extends JSONSchema7> = Record<keyof Configuration<T>, symbol>;

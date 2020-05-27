@@ -7,15 +7,20 @@
   "types": "lib/index.d.ts",
   "license": "MIT",
   "author": "Lorens Leon <lorens.leon@newtral.es>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Newtral-Tech/node-nestjs-configuration.git"
+  },
   "files": [
     "src",
     "esm",
     "lib"
   ],
+  "engines": {
+    "node": ">=10"
+  },
   "dependencies": {
-    "@types/dotenv": "^8.2.0",
     "@types/json-schema": "^7.0.4",
-    "@types/node": "*",
     "ajv": "^6.12.2",
     "dotenv": "^8.2.0"
   },
@@ -52,7 +57,7 @@
     "prebuild": "yarn clean",
     "build": "concurrently 'yarn:build:*'",
     "build:commonjs": "tsc",
-    "build:esm": "tsc --module es2015 --outDir esm",
+    "build:esm": "tsc --module es2020 --outDir esm",
     "clean": "rm -rf lib esm reports tsconfig.tsbuildinfo",
     "test": "mocha --require tests/entry.js 'tests/**/*.{test,spec}.ts'",
     "cover": "nyc yarn test",
