@@ -1,0 +1,21 @@
+language: node_js
+
+node_js:
+  - lts/*
+  - '14'
+  - '12'
+  - '10'
+
+script:
+  - yarn build
+  - yarn test
+
+jobs:
+  include:
+    - stage: release
+      node_js: lts/*
+      script: skip
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script: yarn semantic-release
