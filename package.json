@@ -1,6 +1,6 @@
 {
-  "name": "@newtral-tech/nestjs-configuration",
-  "version": "0.0.0",
+  "name": "@newtral/nestjs-configuration",
+  "version": "0.0.0-development",
   "description": "Dynamic configuration module for NestJS",
   "main": "lib/index.js",
   "module": "esm/index.js",
@@ -17,7 +17,7 @@
     "lib"
   ],
   "engines": {
-    "node": ">=10"
+    "node": ">=10.18"
   },
   "dependencies": {
     "@types/json-schema": "^7.0.4",
@@ -53,6 +53,9 @@
     "tsconfig-paths": "^3.9.0",
     "typescript": "~3.9.3"
   },
+  "peerDependencies": {
+    "@nestjs/common": "^7.1.0"
+  },
   "scripts": {
     "prebuild": "yarn clean",
     "build": "concurrently 'yarn:build:*'",
@@ -66,6 +69,6 @@
     "health": "yarn && yarn clean && yarn lint && yarn build --noEmit && yarn test --reporter dot",
     "ci": "yarn && yarn lint && yarn build --noEmit && yarn test",
     "prepublishOnly": "yarn build",
-    "release": "semantic-release"
+    "semantic-release": "semantic-release"
   }
 }
