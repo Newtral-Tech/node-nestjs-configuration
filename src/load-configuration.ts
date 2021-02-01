@@ -1,4 +1,4 @@
-import { Ajv } from 'ajv';
+import Ajv from 'ajv';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import { JSONSchema7 } from 'json-schema';
