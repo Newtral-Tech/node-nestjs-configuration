@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 import { Injectable } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { ConfigurationError, ConfigurationModule, restoreConfiguration } from '@newtral-tech/nestjs-configuration';
@@ -188,6 +189,26 @@ describe('ConfigurationModule', () => {
     });
 
     expect(tokens.TEST_CONFIG).to.be.a('symbol');
+  });
+
+  it('should validate a configuration with format', async () => {
+    const testConfig = faker.internet.url();
+    process.env.TEST_CONFIG = testConfig;
+
+    const { InjectConfiguration, configurationModule } = ConfigurationModule.forEnvironment({
+      type: 'object',
+      properties: { TEST_CONFIG: { type: 'string', format: 'url' } }
+    });
+
+    @Injectable()
+    class TestService {
+      constructor(@InjectConfiguration('TEST_CONFIG') readonly testConfig: string) {}
+    }
+
+    const moduleRef = await Test.createTestingModule({ imports: [configurationModule], providers: [TestService] }).compile();
+    const testService = moduleRef.get(TestService);
+
+    expect(testService.testConfig).to.be.equal(testConfig);
   });
 });
 

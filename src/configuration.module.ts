@@ -1,5 +1,6 @@
 import { DynamicModule, Inject } from '@nestjs/common';
 import Ajv from 'ajv';
+import ajvFormats from 'ajv-formats';
 import { JSONSchema7 } from 'json-schema';
 import { CONFIGURATION } from './configuration.keys';
 import { getConfigurationInjectionToken } from './get-configuration-injection-token';
@@ -7,6 +8,7 @@ import { JsonSchemaToJs } from './json-schema-to-js.type';
 import { loadConfiguration } from './load-configuration';
 
 const defaultAjv = new Ajv({ $data: true, coerceTypes: true, useDefaults: true, allErrors: true });
+ajvFormats(defaultAjv);
 
 export class ConfigurationModule {
   /**
@@ -52,6 +54,11 @@ export class ConfigurationModule {
 }
 
 export interface ConfigurationModuleResult<T extends JSONSchema7> {
+  /** Configuration module. Should be imported by other modules */
+  configurationModule: DynamicModule;
+  /** Configuration injection tokens. Useful for dynamically getting a configuration value */
+  tokens: ConfigurationInjectionTokens<T>;
+
   /**
    * Inject a single configuration value that matches the given key.
    * The type for the injected value is `Configuration<schema>[configurationKey]`
@@ -63,12 +70,6 @@ export interface ConfigurationModuleResult<T extends JSONSchema7> {
 
   /** Inject the whole configuration object. The type for this object is `Configuration<schema>` */
   InjectConfiguration(): (target: Object, propertyKey: string | symbol, parameterIndex?: number) => void;
-
-  /** Configuration module. Should be imported by other modules */
-  configurationModule: DynamicModule;
-
-  /** Configuration injection tokens. Useful for dynamically getting a configuration value */
-  tokens: ConfigurationInjectionTokens<T>;
 }
 
 /** Map a JSON schema into a valid JS type representation. It's currently very limited but usable enough */
