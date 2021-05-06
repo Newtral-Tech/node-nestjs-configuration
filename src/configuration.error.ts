@@ -5,16 +5,16 @@ export class ConfigurationError extends Error {
 
   get message(): string {
     const errorMessage = this.errors
-      .map(({ message, dataPath, params }) => {
-        if (dataPath.startsWith('.')) {
-          dataPath = dataPath.slice(1);
+      .map(({ message, instancePath, params }) => {
+        if (instancePath.startsWith('.')) {
+          instancePath = instancePath.slice(1);
         }
 
-        if (dataPath) {
-          dataPath = `${dataPath} `;
+        if (instancePath) {
+          instancePath = `${instancePath} `;
         }
 
-        return `  - ${dataPath}${message} | ${paramsToString(params)}`.trim();
+        return `  - ${instancePath}${message} | ${paramsToString(params)}`.trim();
       })
       .join('\n');
 
