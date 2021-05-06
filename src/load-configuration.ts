@@ -1,6 +1,5 @@
 import Ajv from 'ajv';
 import dotenv from 'dotenv';
-import fs from 'fs';
 import { JSONSchema7 } from 'json-schema';
 import { ConfigurationError } from './configuration.error';
 import { Configuration } from './configuration.module';
@@ -36,10 +35,14 @@ export function loadConfiguration<T extends JSONSchema7>(schema: T, ajv: Ajv): C
     // For example, when `NODE_ENV` is `test` will try to load  a `.env.test` file
     const environmentEnvFile = `.env.${nodeEnv}`;
 
-    if (fs.existsSync(environmentEnvFile)) {
+    try {
       const envConfig = dotenv.config({ path: environmentEnvFile }).parsed ?? {};
 
       assignIfNotSet(env, envConfig);
+    } catch (err) {
+      if ((err as any).code !== 'ENOENT') {
+        throw err;
+      }
     }
   }
 
