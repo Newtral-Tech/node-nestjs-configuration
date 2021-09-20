@@ -1,4 +1,4 @@
-# @newtral-tech/nestjs-configuration
+# @newtral/nestjs-configuration
 
 ## Usage
 
@@ -10,19 +10,17 @@ USER_EXTERNAL_ENDPOINT=https://api.exaple.com/users
 ```
 
 ```typescript
-import { ConfigurationModule } from '@newtral-tech/nestjs-configuration';
+import { ConfigurationModule } from '@newtral/nestjs-configuration';
 import { Injectable, Module } from '@nestjs/common';
 
-// Define a valid JSON schema for your configuration object.
-const schema = {
+// Define a valid JSON schema for your configuration object
+const { InjectConfiguration, configurationModule } = ConfigurationModule.forEnvironment({
   type: 'object',
   properties: {
     USER_EXTERNAL_ENDPOINT: { type: 'string' }
   },
   required: ['USER_EXTERNAL_ENDPOINT']
-};
-
-const { InjectConfiguration, configurationModule } = ConfigurationModule.forEnvironment(schema);
+});
 
 @Injectable()
 class UserService {
