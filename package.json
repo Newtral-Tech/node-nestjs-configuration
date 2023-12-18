@@ -1,6 +1,6 @@
 {
   "name": "@newtral/nestjs-configuration",
-  "version": "4.5.1",
+  "version": "4.5.3",
   "description": "Dynamic configuration module for NestJS",
   "main": "lib/index.js",
   "module": "esm/index.js",
