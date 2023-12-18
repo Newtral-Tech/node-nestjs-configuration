@@ -66,10 +66,10 @@ export interface ConfigurationModuleResult<T extends JSONSchema7> {
    */
   InjectConfiguration(
     configurationKey: keyof Configuration<T>
-  ): (target: Object, propertyKey: string | symbol, parameterIndex?: number) => void;
+  ): (target: Object, propertyKey: string | symbol | undefined, parameterIndex?: number) => void;
 
   /** Inject the whole configuration object. The type for this object is `Configuration<schema>` */
-  InjectConfiguration(): (target: Object, propertyKey: string | symbol, parameterIndex?: number) => void;
+  InjectConfiguration(): (target: Object, propertyKey: string | symbol | undefined, parameterIndex?: number) => void;
 }
 
 /** Map a JSON schema into a valid JS type representation. It's currently very limited but usable enough */
