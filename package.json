@@ -54,9 +54,6 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "~5.3.3"
   },
-  "peerDependencies": {
-    "@nestjs/common": "^8.2.5"
-  },
   "scripts": {
     "prebuild": "npm run clean",
     "build": "concurrently 'npm:build:*'",
