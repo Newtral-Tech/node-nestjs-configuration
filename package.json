@@ -1,6 +1,6 @@
 {
   "name": "@newtral/nestjs-configuration",
-  "version": "4.4.0",
+  "version": "4.5.0",
   "description": "Dynamic configuration module for NestJS",
   "main": "lib/index.js",
   "module": "esm/index.js",
@@ -34,8 +34,8 @@
     "@types/chai-as-promised": "^7.1.8",
     "@types/faker": "^6.6.8",
     "@types/mocha": "^10.0.6",
-    "@typescript-eslint/eslint-plugin": "^6.14.0",
-    "@typescript-eslint/parser": "^6.14.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
     "chai": "^4.3.10",
     "chai-as-promised": "^7.1.1",
     "concurrently": "^8.2.2",
